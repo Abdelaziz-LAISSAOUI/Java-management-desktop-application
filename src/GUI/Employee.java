@@ -5,6 +5,8 @@
 package GUI;
 
 import java.awt.Font;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
@@ -95,7 +97,9 @@ public class Employee implements AfficherList{
     
     }
     
-    
+    public static ArrayList<Employee> getAvailableEmployees(String secteur, String specialite, LocalDateTime dateRes){
+        return new ArrayList<Employee>();
+    }
     
     
 }

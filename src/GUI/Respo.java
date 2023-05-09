@@ -6,9 +6,12 @@ package GUI;
 
 import static GUI.AfficherReservation.AfficherConsultation;
 import static GUI.AfficherReservation.AfficherReservatoinEmploye;
+import static GUI.AfficherReservation.AfficherReservatoinResponsable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import GUI.Respo;
 
 /**
  *
@@ -331,13 +334,16 @@ new Reservation(10, now, today, "paramédicale", "changement_pansements", "Sampl
         consultationPanel.setVisible(false);
         feedbackPanel.setVisible(false);
         reservationPanel.setVisible(true);
+        
         jScrollPane3.revalidate();
         jScrollPane3.repaint();
+        
         reservationPanel.revalidate();
         reservationPanel.repaint();
         
         if(! reservationClicked){
-            AfficherReservatoinEmploye(reservationContainer,reservations);
+//            AfficherReservatoinResponsable(reservationContainer,reservations);
+              AfficherReservatoinResponsable( reservationContainer, reservations, this);
             reservationClicked = true; 
         
         }
