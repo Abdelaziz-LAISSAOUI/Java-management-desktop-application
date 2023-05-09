@@ -13,6 +13,7 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
@@ -176,7 +177,7 @@ public static void AfficherReservatoinResponsable( JPanel reservationContainer, 
         
         reservationContainer.setLayout(new GridLayout(interfaceArray.length/2+1,2,20,20));
         reservationContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-//        reservationContainer.setLayout(new FlowLayout());
+
     
 //      loop through the state 
       for (AfficherList object : interfaceArray){
@@ -206,14 +207,28 @@ public static void AfficherReservatoinResponsable( JPanel reservationContainer, 
             availableEmployees.add(new Employee(5, "Brown", "Oliver", "médical", 6, "Dermatology"));
             
 
+            
             // Code to show the pop-up dialog
             JDialog employeeDialog = new JDialog(frame, "Available Employees", true);
             employeeDialog.setLayout(new BorderLayout());
             employeeDialog.setPreferredSize(new Dimension(800, 800));
+
+            JPanel titlepanel = new JPanel();
+            titlepanel.setBackground(Color.WHITE);
+
+            // Create a JLabel for the title
+            JLabel titleLabel = new JLabel("Voici les employe diponibles :");
+            titleLabel.setFont(new Font("Montserrat", Font.BOLD, 24));
+            titlepanel.add(titleLabel);
+            employeeDialog.add(titlepanel, BorderLayout.PAGE_START);
             
             // getAvailableEmployees(String secteur, String specialite, LocalDateTime dateRes);
             if (availableEmployees.size() > 0) {
-                employeeDialog.setLayout(new GridLayout(availableEmployees.size()/2+1, 2, 10, 10));
+                
+//                employeeDialog.setLayout(new GridLayout(availableEmployees.size()/2+1, 2, 10, 10));
+                JPanel availableEmpGrid = new JPanel();
+                availableEmpGrid.setLayout(new GridLayout(availableEmployees.size()/2+1, 2, 10, 10));
+                availableEmpGrid.setBorder(BorderFactory.createEmptyBorder(20,20,20, 20));
                 for (Employee employee : availableEmployees) {
                     JPanel employeeCard = new JPanel(new BorderLayout());
         
@@ -233,11 +248,14 @@ public static void AfficherReservatoinResponsable( JPanel reservationContainer, 
                     chooseButton.setBackground(Color.yellow);
                     chooseButton.setForeground(Color.BLACK);
                     chooseButton.addActionListener(evt -> {
-                    // Code to handle employee selection
-                    employeeDialog.dispose();
+                    // Code to handle employee selection 
+                    // #TODO : update the reservtion affecter le medcin choisi
+                    // supprimer de la reservation 
+                        reservationContainer.remove(panel);
+                        reservationContainer.revalidate();
+                        reservationContainer.repaint();
+                        employeeDialog.dispose();
                     });
-                    
-//                     
                     
                     JPanel buttonChoosePanel = new JPanel();
                     buttonChoosePanel.add(chooseButton);
@@ -245,37 +263,37 @@ public static void AfficherReservatoinResponsable( JPanel reservationContainer, 
                     Border lineBorder = BorderFactory.createMatteBorder(4, 0, 0, 0, Color.LIGHT_GRAY);
                     buttonChoosePanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0), lineBorder));
 
-
-
-
-                    employeeDialog.add(employeeCard);
                     employeeCard.add(buttonChoosePanel, BorderLayout.SOUTH);
+                    availableEmpGrid.add(employeeCard);
                 }
-                
-            }else{ // pas d'empoyes disponible 
+                employeeDialog.add(availableEmpGrid, BorderLayout.CENTER);
+            }else{ // pas d'employes disponible 
                 JLabel noEmployeesLabel = new JLabel("No available employees.");
                 noEmployeesLabel.setFont(font);
                 employeeDialog.add(noEmployeesLabel, BorderLayout.CENTER);
             }
 
-        JButton cancelButton2 = new JButton("Cancel");
-        cancelButton2.addActionListener(event -> {
-        employeeDialog.dispose();
+        JPanel cancelButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        JButton cancelButtonAvailableEmp = new JButton("Cancel");
+        cancelButtonAvailableEmp.setFont(font);
+        cancelButtonAvailableEmp.setBackground(Color.red);
+        cancelButtonAvailableEmp.setForeground(Color.WHITE);
+        cancelButtonAvailableEmp.setPreferredSize(new Dimension(100, cancelButtonAvailableEmp.getPreferredSize().height));
+        
+        cancelButtonPanel.add(cancelButtonAvailableEmp);
+
+        cancelButtonAvailableEmp.addActionListener(event -> {
+            employeeDialog.dispose(); // on fait rien juste retour au reservation
         });
         
-        if (availableEmployees.size()== 0)
-            employeeDialog.add(cancelButton2, BorderLayout.SOUTH);
-        
-        employeeDialog.add(cancelButton2);
+        employeeDialog.add(cancelButtonPanel, BorderLayout.SOUTH);
         employeeDialog.pack();
         employeeDialog.setLocationRelativeTo(frame);
         employeeDialog.setVisible(true);
-
-            
-            
             
         });
-        //end event listner
+        //end event listner affecter employee
         
         //Annuler reservation Button******************************************** 
         JButton removeButton = new JButton("Annuler");
